@@ -200,7 +200,7 @@ for orders in sales_log.values():
     for order in orders:
         for item in order["items"]:
             ct_items[item] = ct_items.get(item, 0) + 1
-most_ordered = max(ct_items, key=Ct_items.get)
+most_ordered = max(ct_items, key=ct_items.get)
 print("The most ordered item is:", most_ordered)
 print()
 # Adding New Day to Sales Log
@@ -213,9 +213,10 @@ for date, orders in sales_log.items():
 print()
 # Print a numbered list of all orders across all dates (including the new day)
 print("List of all orders:")
-count = 1
+ord = []
 for date, orders in sales_log.items():
     for order in orders:
-        it = ", ".join(order["items"])
-        print(f"{count}. [{date}] Order #{order['order_id']} — ₹{order['total']} — Items: {it}")
-        count += 1
+        ord.append((date, order))
+for count, (date, order) in enumerate(ord, 1):
+    it = ", ".join(order["items"])
+    print(f"{count}. [{date}] Order #{order['order_id']} — ₹{order['total']} — Items: {it}")
