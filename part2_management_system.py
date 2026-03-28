@@ -107,18 +107,18 @@ def remove_item(name):
     print("Item not in cart.")
 
 # Requirements
-add_item("Paneer Tikka", 2)
+add_item("Paneer Tikka",2)
 print(cart)
 print()
-add_item("Gulab Jamun", 1)
+add_item("Gulab Jamun",1)
 print(cart)
 print()
-add_item("Paneer Tikka", 1)
+add_item("Paneer Tikka",1)
 print(cart)
 print()
-add_item("Mystery Burger", 1)
+add_item("Mystery Burger",1)
 print()
-add_item("Chicken Wings", 1)
+add_item("Chicken Wings",1)
 print()
 remove_item("Gulab Jamun")
 print(cart)
@@ -135,8 +135,8 @@ total_amt = total + gst
 
 print("------------------------------------")
 print(f"Subtotal:                ₹{total:.2f}")
-print(f"GST:                      ₹{gst:.2f}")
-print(f"Total:                  ₹{total_amt:.2f}")
+print(f"GST:                     ₹ {gst:.2f}")
+print(f"Total:                   ₹{total_amt:.2f}")
 print("====================================")
 print()
 print()
@@ -144,4 +144,78 @@ print()
 # TASK 3: Inventory Tracker with Deep Copy
 print(" INVENTORY TRACKER ")
 print()
-
+import copy
+inventory_backup = copy.deepcopy(inventory)
+# change one stock value
+inventory["Dal Tadka"]["stock"] = 13
+print("Modification of original inventory:", inventory["Dal Tadka"])
+print()
+print("Backup inventory:", inventory_backup["Dal Tadka"])
+print()
+# Deduct the quantities from the final cart in Task 2
+for items in cart:
+    name = items["item"]
+    qty = items["quantity"]
+    if inventory[name]["stock"] < qty:
+        print(f"Low in stock for: ", name)
+        inventory[name]["stock"] = 0
+    else:
+        inventory[name]["stock"] -= qty
+print()
+# Reorder alert
+for items, data in inventory.items():
+    if data["stock"] <= data["reorder_level"]:
+        print(f"⚠ Reorder Alert: ,{items}, — Only {data['stock']} left")
+print()
+print("Checking if the backup has remained unchanged:")
+print(inventory_backup["Paneer Tikka"])
+print()
+# Print both inventory and inventory_backup at the end to confirm they differ
+# To prove the deep copy protected the original.
+print("Checking if there has been a change in Original Inventory")
+print(inventory)
+print()
+print("Checking if the Backup Inventory has remained unchanged:")
+print(inventory_backup)
+print()
+print()
+print()
+# TASK 4: Daily Sales Log Analysis
+print(" Daily Sales Log Analysis ")
+print()
+# Total revenue per day
+daily_rev = {}
+for date, orders in sales_log.items():
+    total = sum(order["total"] for order in orders)
+    daily_rev[date] = total
+    print(date, ":", total)
+print()
+# The best-selling day (date with the highest total revenue)
+day = max(daily_rev, key=daily_rev.get)
+print("The best selling day is:",day)
+print()
+# The most ordered item across all days
+ct_items = {}
+for orders in sales_log.values():
+    for order in orders:
+        for item in order["items"]:
+            ct_items[item] = ct_items.get(item, 0) + 1
+most_ordered = max(ct_items, key=Ct_items.get)
+print("The most ordered item is:", most_ordered)
+print()
+# Adding New Day to Sales Log
+sales_log["2025-01-05"] = [{"order_id": 11, "items": ["Butter Chicken", "Gulab Jamun", "Garlic Naan"], "total": 490.0},
+    {"order_id": 12, "items": ["Paneer Tikka", "Rasgulla"], "total": 260.0},]
+print("New Revenue=")
+for date, orders in sales_log.items():
+    tot = sum(order["total"] for order in orders)
+    print(date, ":", tot)
+print()
+# Print a numbered list of all orders across all dates (including the new day)
+print("List of all orders:")
+count = 1
+for date, orders in sales_log.items():
+    for order in orders:
+        it = ", ".join(order["items"])
+        print(f"{count}. [{date}] Order #{order['order_id']} — ₹{order['total']} — Items: {it}")
+        count += 1
